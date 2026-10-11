@@ -2,6 +2,8 @@
 
 Lichess publishes every rated game played on the site. A player's rating predicts how many points they should score against each opponent, so a player who keeps scoring far above that prediction is either improving fast or getting help. This project uses one month of games (January 2015, about 1.5 million games) to flag the players whose results beat their rating the most, then asks the Lichess API which of them were later marked for cheating.
 
+It is a small sample of what the data allows, not a cheat detector. It looks at a couple of things that ratings and results can show, to see whether anything turns up, and it is not meant to be foolproof. Lichess publishes every month since 2013 as its own download, and the same SQL works on any of them by changing one filename in `build.sql`. January 2015 was picked because it is small. The newest months are around 30 GB and would run the same way, just slower.
+
 ## What the data looks like
 
 The Lichess file is not a table. It is one huge text file, and every game in it looks like this: a block of header tags, a blank line, and one long line of moves.
@@ -71,4 +73,4 @@ The download is about 290 MB and is gitignored, along with the database and the 
 
 ## What this can't do
 
-The games file has no move times and engine evaluations on only a few games, so this only sees results, not moves. New accounts with provisional ratings gain rating fast and can look like suspects. And a terms of service mark can come years later for reasons other than cheating, so the ban check is a rough answer, not a verdict. The suspect list stays on your machine.
+A real detector would look at far more than this. The games file has no move times and engine evaluations on only a few games, so this only sees results, not moves. New accounts with provisional ratings gain rating fast and can look like suspects. And a terms of service mark can come years later for reasons other than cheating, so the ban check is a rough answer, not a verdict. The suspect list stays on your machine.
