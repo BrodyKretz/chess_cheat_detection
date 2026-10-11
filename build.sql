@@ -29,6 +29,7 @@ FROM tags
 GROUP BY game_id;
 
 -- 4. One row per player per game: their rating, the opponent's rating, the points they scored and how their rating moved.
+DROP VIEW IF EXISTS player_games;
 CREATE OR REPLACE TABLE player_games AS
 SELECT game_id, white AS player, white_elo AS elo, black_elo AS opp_elo, white_change AS rating_change, termination,
 CASE result WHEN '1-0' THEN 1.0 WHEN '0-1' THEN 0.0 ELSE 0.5 END AS score

@@ -51,7 +51,9 @@ Three files, run in order:
 
 January 2015: 1,497,237 games, 11,649 players with 50 or more games, 52 suspects. 18 of the 52 suspects (34.6%) carry a terms of service mark, against about 7% of a random 300 player control group. One rule built from nothing but ratings and results finds cheaters at five times the base rate.
 
-![Funnel and top suspects](images/suspects.png)
+![Games loaded](images/build.png)
+
+![Funnel and top suspects](images/analysis.png)
 
 ![Ban check](images/check_bans.png)
 
