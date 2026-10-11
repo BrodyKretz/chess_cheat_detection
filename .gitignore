@@ -1,0 +1,5 @@
+*.zst
+*.csv
+*.db
+*.wal
+.DS_Store
