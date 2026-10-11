@@ -2,17 +2,50 @@
 
 Lichess publishes every rated game played on the site. A player's rating predicts how many points they should score against each opponent, so a player who keeps scoring far above that prediction is either improving fast or getting help. This project uses one month of games (January 2015, about 1.5 million games) to flag the players whose results beat their rating the most, then asks the Lichess API which of them were later marked for cheating.
 
+## What the data looks like
+
+The Lichess file is not a table. It is one huge text file, and every game in it looks like this: a block of header tags, a blank line, and one long line of moves.
+
+```
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/9fC5l6Xf"]
+[White "Ukiteru9"]
+[Black "Master_Chief"]
+[Result "1-0"]
+[UTCDate "2014.12.31"]
+[UTCTime "23:00:37"]
+[WhiteElo "1961"]
+[BlackElo "1618"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[ECO "A04"]
+[Opening "Zukertort Opening: Kingside Fianchetto"]
+[TimeControl "0+1"]
+[Termination "Time forfeit"]
+
+1. Nf3 g6 2. d4 Bg7 3. Bg5 Nc6 4. h4 h6 5. Bd2 e6 6. e4 Nce7 7. e5 Nf6 ...
+```
+
+`build.sql` reads that text with DuckDB and turns each game into one row:
+
+| game_id | white | black | white_elo | black_elo | white_change | black_change | result | termination |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Ukiteru9 | Master_Chief | 1961 | 1618 | 4 | -4 | 1-0 | Time forfeit |
+
+and then into one row per player, which is what the analysis runs on:
+
+| game_id | player | elo | opp_elo | rating_change | score |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Ukiteru9 | 1961 | 1618 | 4 | 1.0 |
+| 1 | Master_Chief | 1618 | 1961 | -4 | 0.0 |
+
 ## How it works
 
-`pipeline.sql` runs in DuckDB with no other tools:
+Three files, run in order:
 
-1. Read the compressed game file as text and keep the header tags.
-2. Split the tags into one row per game: both players, both ratings, both rating changes, the result and how the game ended.
-3. Turn each game into two rows, one per player, with the points they scored (1, 0.5 or 0).
-4. For every player with 50 or more games, compare the points they scored with the points the Elo formula expected given their opponents' ratings. The gap is their `edge`. It also counts games the player lost to a rules infraction, which is Lichess catching someone mid game.
-5. Anyone with an edge of 0.15 or more is a suspect. A random 300 of the rest are the control group.
-
-`check_bans.py` then sends both lists to the Lichess API and counts how many accounts carry a terms of service violation, which is how Lichess marks cheaters.
+1. `build.sql` reads the compressed game file as lines of text, keeps the header tags, splits them into one row per game, then one row per player per game with the points they scored (1, 0.5 or 0). Everything lands in `lichess.db`.
+2. `analysis.sql` takes every player with 50 or more games and compares the points they scored with the points the Elo formula expected given their opponents' ratings. The gap is their `edge`. Anyone with an edge of 0.15 or more is a suspect, and a random 300 of the rest are the control group. It also counts games a player lost to a rules infraction, which is Lichess catching someone mid game.
+3. `check_bans.py` sends both lists to the Lichess API and counts how many accounts carry a terms of service violation, which is how Lichess marks cheaters.
 
 ## Results
 
@@ -27,7 +60,8 @@ January 2015: 1,497,237 games, 11,649 players with 50 or more games, 52 suspects
 ```
 brew install duckdb
 curl -L -O https://database.lichess.org/standard/lichess_db_standard_rated_2015-01.pgn.zst
-duckdb lichess.db -f pipeline.sql
+duckdb lichess.db -f build.sql
+duckdb lichess.db -f analysis.sql
 python3 check_bans.py suspects.csv control.csv
 ```
 
