@@ -1,8 +1,6 @@
 -- Can SQL catch chess cheaters? Flags Lichess players whose results are too good for their rating.
 -- Run from this folder: duckdb lichess.db -f pipeline.sql
 
-SET preserve_insertion_order = true;
-
 -- 1. Read the file as lines of text and keep the tag lines, the ones that start with "[".
 CREATE OR REPLACE TABLE lines AS
 SELECT line, ROW_NUMBER() OVER () AS line_number

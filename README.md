@@ -9,12 +9,14 @@ Lichess publishes every rated game played on the site. A player's rating predict
 1. Read the compressed game file as text and keep the header tags.
 2. Split the tags into one row per game: both players, both ratings, both rating changes, the result and how the game ended.
 3. Turn each game into two rows, one per player, with the points they scored (1, 0.5 or 0).
-4. For every player with 50 or more games, compare the points they scored with the points the Elo formula expected given their opponents' ratings. The gap is their `edge`.
+4. For every player with 50 or more games, compare the points they scored with the points the Elo formula expected given their opponents' ratings. The gap is their `edge`. It also counts games the player lost to a rules infraction, which is Lichess catching someone mid game.
 5. Anyone with an edge of 0.15 or more is a suspect. A random 300 of the rest are the control group.
 
 `check_bans.py` then sends both lists to the Lichess API and counts how many accounts carry a terms of service violation, which is how Lichess marks cheaters.
 
 ## Results
+
+January 2015: 1,497,237 games, 11,649 players with 50 or more games, 52 suspects. 18 of the 52 suspects (34.6%) carry a terms of service mark, against about 7% of a random 300 player control group. One rule built from nothing but ratings and results finds cheaters at five times the base rate.
 
 ![Funnel and top suspects](images/suspects.png)
 

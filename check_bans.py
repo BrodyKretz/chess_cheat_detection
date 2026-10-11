@@ -23,7 +23,7 @@ def check(path):
     users = lookup(names)
     marked = sum(1 for name in names if users.get(name.lower(), {}).get("tosViolation"))
     closed = sum(1 for name in names if users.get(name.lower(), {}).get("disabled"))
-    print(f"{path}: {len(names)} players, {marked} marked for cheating ({100 * marked / len(names):.1f}%), {closed} closed accounts")
+    print(f"{path}: {len(names)} players, {marked} marked for cheating ({100 * marked / max(len(names), 1):.1f}%), {closed} closed accounts")
 
 
 for path in sys.argv[1:]:
