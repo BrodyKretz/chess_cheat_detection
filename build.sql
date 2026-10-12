@@ -1,3 +1,5 @@
+--This portion was generated with AI to help me convert the data to tables so my SQL could run against it.
+--The code that i wrote by hand is stored the .py and analysis.sql
 -- Turns the Lichess text file into tables inside lichess.db.
 -- Run from this folder: duckdb lichess.db -f build.sql
 
