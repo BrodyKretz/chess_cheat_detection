@@ -12,12 +12,8 @@ ROUND(AVG(score), 3) AS actual,
 ROUND(AVG(1 / (1 + POWER(10, (opp_elo - elo) / 400.0))), 3) AS expected,
 ROUND(AVG(score) - AVG(1 / (1 + POWER(10, (opp_elo - elo) / 400.0))), 3) AS edge,
 SUM(rating_change) AS rating_gain,
-  
-SELECT COUNT(*) AS infraction_losses
-FROM games
-WHERE termination = 'Rules infraction' AND score = 0;
-
-  
+COUNT(CASE WHEN termination = 'Rules infraction' AND score = 0 THEN 1 END) AS infraction_losses
+FROM player_games
 WHERE elo IS NOT NULL AND opp_elo IS NOT NULL
   
 GROUP BY player
