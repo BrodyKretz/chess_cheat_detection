@@ -2,7 +2,7 @@
 -- Run from this folder: duckdb lichess.db -f analysis.sql
 
 -- 1. One row per player with 50 or more games: the points they scored, the points the Elo formula expected, and the gap between the two.
-CREATE OR REPLACE TABLE profile AS  -- builds (or rebuilds) one summary row per player
+CREATE OR REPLACE TABLE profile AS  -- builds or rebuilds one summary row per player
   
 SELECT player,
   
@@ -21,7 +21,7 @@ GROUP BY player
 HAVING COUNT(*) >= 50;
 
 -- 2. Suspects score at least 0.15 points per game more than their rating predicts. A random 300 of everyone else is the control group.
-CREATE OR REPLACE TABLE suspects AS  -- builds (or rebuilds) the table of flagged players
+CREATE OR REPLACE TABLE suspects AS  -- builds or rebuilds the table of flagged players
   
 SELECT *
   
