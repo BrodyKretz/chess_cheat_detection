@@ -74,3 +74,7 @@ The download is about 290 MB and is gitignored, along with the database and the 
 ## What this can't do
 
 A real detector would look at far more than this. The games file has no move times and engine evaluations on only a few games, so this only sees results, not moves. New accounts with provisional ratings gain rating fast and can look like suspects. And a terms of service mark can come years later for reasons other than cheating, so the ban check is a rough answer, not a verdict. The suspect list stays on your machine.
+
+
+* build.sql was generated with AI to help me convert the data to tables so my SQL could run against it
+* The code that i wrote by hand is the .py and analysis.sql
