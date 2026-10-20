@@ -1,3 +1,5 @@
+# Build.sql was generated with AI to convert data into tables
+
 # Can SQL Catch Chess Cheaters?
 
 Lichess publishes every rated game played on the site. A player's rating predicts how many points they should score against each opponent, so a player who keeps scoring far above that prediction is either improving fast or getting help. This project uses one month of games (January 2015, about 1.5 million games) to flag the players whose results beat their rating the most, then asks the Lichess API which of them were later marked for cheating.
