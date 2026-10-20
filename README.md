@@ -1,4 +1,4 @@
-# Build.sql was generated with AI to convert data into tables
+### Note: Build.sql was generated with AI to convert data into tables
 
 # Can SQL Catch Chess Cheaters?
 
